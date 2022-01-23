@@ -8,7 +8,8 @@ import 'package:firebase_database/firebase_database.dart';
 // basics of network requests
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // prevents race condition between firebase and widgets initializing
+  WidgetsFlutterBinding
+      .ensureInitialized(); // prevents race condition between firebase and widgets initializing.
   runApp(MyApp());
 }
 
@@ -19,23 +20,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: FutureBuilder(
-        future: _fbApp,
-        builder: (context, snapshot) {
-          if(snapshot.hasError){
-            print('you have this error: ${snapshot.error.toString()}');
-            return Text("error occured");
-          } else if (snapshot.hasData){
-            return HomePage();
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        }, // callback that gets called initially, as well as when the future builder gets completed
-
-      )
-    );
+        home: FutureBuilder(
+      future: _fbApp, // what future i want to be monitoring.
+      builder: (context, snapshot) {
+        // called when the state of the builder changes
+        if (snapshot.hasError) {
+          print('you have this error: ${snapshot.error.toString()}');
+          return Text("error occured");
+        } else if (snapshot.hasData) {
+          return HomePage();
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      }, // callback that gets called initially, as well as when the future builder gets completed
+    ));
   }
 }
 
@@ -67,6 +67,5 @@ class _HomePageState extends State<HomePage> {
     _testRef.set("hello World! ${Random().nextInt(100)}");
     print("feedback");
     // get(Uri.parse('https://jsonplaceholder.typicode.com/photos')).then((result) { print(result.body);  });
-
   }
 }
