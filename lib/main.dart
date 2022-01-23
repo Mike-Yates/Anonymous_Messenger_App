@@ -1,67 +1,72 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
+import 'package:http/http.dart' show get;
 
-void main() {
-  runApp(const MyApp());
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+// basics of network requests
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // prevents race condition between firebase and widgets initializing
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  // Future<FirebaseApp> stands for object of type Future that later resolves to type FirebaseApp
+  final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: FutureBuilder(
+        future: _fbApp,
+        builder: (context, snapshot) {
+          if(snapshot.hasError){
+            print('you have this error: ${snapshot.error.toString()}');
+            return Text("error occured");
+          } else if (snapshot.hasData){
+            return HomePage();
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        }, // callback that gets called initially, as well as when the future builder gets completed
+
+      )
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("GET Request"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        fetchData();
+      }),
     );
+  }
+
+  void fetchData() async {
+    //var result = await get(Uri.parse('https://jsonplaceholder.typicode.com/photos'));
+    // print(result.body);
+
+    DatabaseReference _testRef = FirebaseDatabase.instance.ref().child("test");
+    _testRef.set("hello World! ${Random().nextInt(100)}");
+    print("feedback");
+    // get(Uri.parse('https://jsonplaceholder.typicode.com/photos')).then((result) { print(result.body);  });
+
   }
 }
