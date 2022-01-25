@@ -1,3 +1,4 @@
+import 'package:anonymous_commenter_app/screens/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:http/http.dart' show get;
@@ -14,28 +15,11 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // Future<FirebaseApp> stands for object of type Future that later resolves to type FirebaseApp
-  final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: FutureBuilder(
-      future: _fbApp, // what future i want to be monitoring.
-      builder: (context, snapshot) {
-        // called when the state of the builder changes
-        if (snapshot.hasError) {
-          print('you have this error: ${snapshot.error.toString()}');
-          return Text("error occured");
-        } else if (snapshot.hasData) {
-          return HomePage();
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      }, // callback that gets called initially, as well as when the future builder gets completed
-    ));
+      home: Wrapper(),
+    );
   }
 }
 
