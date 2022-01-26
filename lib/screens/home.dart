@@ -47,8 +47,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: () async {
+          // await Navigator.pushNamed(context, '/post'); // we use await because after the user posts it should return to this page?
+          Navigator.pushNamed(context, '/post');
+        },
+        tooltip: 'Post New Content',
         child: const Icon(Icons.add),
       ),
     );

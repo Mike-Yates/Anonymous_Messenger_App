@@ -10,8 +10,12 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("post page"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Create New Post"),
+      ),
+      body: Text(
+          "post options page. should basically be a column of buttons, Poll, Picture/Video, Rank. message before post is always available"),
     );
   }
 }
