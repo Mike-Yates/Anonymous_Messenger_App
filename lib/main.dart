@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(MaterialApp(routes: {
-    '/': (context) => MyApp(),
-    '/login': (context) => LogIn(),
+    '/': (context) => LoginScreen(), //MyApp(),
+    '/login': (context) => LoginScreen(),
     '/post': (context) => PostPage(),
   }));
 }
