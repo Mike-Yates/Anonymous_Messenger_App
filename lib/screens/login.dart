@@ -7,6 +7,7 @@ const users = {
   'Yates@gmail.com': 'GoatTalk',
 };
 
+// todo: change username to phone number
 // referenced https://pub.dev/packages/flutter_login
 class LoginScreen extends StatelessWidget {
   Duration get loginTime => Duration(milliseconds: 2250);
